@@ -6,10 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 import tacos.Ingredient;
 import tacos.Ingredient.Type;
@@ -25,7 +22,7 @@ public class DesignTacoController {
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
         List<Ingredient> ingredients = Arrays.asList(
-                new Ingredient("FLTO", "Мучная Tortilla ", Type.WRAP),
+                new Ingredient("FLTO", "Мучная Tortilla", Type.WRAP),
                 new Ingredient("COTO", "Кукурузная Tortilla", Type.WRAP),
                 new Ingredient("GRBF", "Говяжий фарш", Type.PROTEIN),
                 new Ingredient("CARN", "Свиной фарш", Type.PROTEIN),
@@ -34,7 +31,7 @@ public class DesignTacoController {
                 new Ingredient("LETC", "Лист салата", Type.VEGGIES),
                 new Ingredient("CHED", "Чедр", Type.CHEESE),
                 new Ingredient("JACK", "Чёрный принц", Type.CHEESE),
-                new Ingredient("JACK", "Российский", Type.CHEESE),
+                new Ingredient("RUCK", "Российский", Type.CHEESE),
                 new Ingredient("SLSA", "Сальса", Type.SAUCE),
                 new Ingredient("SRCR", "Сметана", Type.SAUCE)
         );
@@ -59,6 +56,14 @@ public class DesignTacoController {
     @GetMapping
     public String showDesignForm() {
         return "design";
+    }
+
+    @PostMapping
+    public String processTaco(Taco taco,
+                              @ModelAttribute TacoOrder tacoOrder) {
+        tacoOrder.addTaco(taco);
+        log.info("Processing taco: {}", taco);
+        return "redirect:/orders/current";
     }
 
     private Iterable<Ingredient> filterByType(

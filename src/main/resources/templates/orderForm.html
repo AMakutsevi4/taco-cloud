@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Taco Cloud</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" />
+</head>
+<body>
+<form method="POST" th:action="@{/orders}" th:object="${tacoOrder}">
+    <h1>Закажите свои тако-творения!</h1>
+    <img th:src="@{/images/TacoCloud.png}"/>
+    <h3>Ваши тако для доставки:</h3>
+    <a th:href="@{/design}" id="another">Приготовьте еще одно тако</a><br/>
+    <ul>
+        <li th:each="taco : ${tacoOrder.tacos}">
+            <span th:text="${taco.name}">taco name</span></li>
+    </ul>
+    <h3>Доставьте мои шедевры из тако в...</h3>
+    <label for="deliveryName">Название: </label>
+    <input type="text" th:field="*{deliveryName}"/>
+    <br/>
+    <label for="deliveryStreet">Адрес: </label>
+    <input type="text" th:field="*{deliveryStreet}"/>
+    <br/>
+    <label for="deliveryCity">Город: </label>
+    <input type="text" th:field="*{deliveryCity}"/>
+    <br/>
+    <label for="deliveryState">Улица: </label>
+    <input type="text" th:field="*{deliveryState}"/>
+    <br/>
+    <label for="deliveryZip">Почтовый индекс: </label>
+    <input type="text" th:field="*{deliveryZip}"/>
+    <br/>
+    <h3>Я заплачу...</h3>
+    <label for="ccNumber">Картой #: </label>
+    <input type="text" th:field="*{ccNumber}"/>
+    <br/>
+    <label for="ccExpiration">Срок действия: </label>
+    <input type="text" th:field="*{ccExpiration}"/>
+    <br/>
+    <label for="ccCVV">CVV код: </label>
+    <input type="text" th:field="*{ccCVV}"/>
+    <br/>
+    <input type="submit" value="Отправить заказ"/>
+</form>
+</body>
+</html>
