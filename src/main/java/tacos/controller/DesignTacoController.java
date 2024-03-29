@@ -2,9 +2,11 @@ package tacos.controller;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -14,6 +16,7 @@ import tacos.Ingredient;
 import tacos.Ingredient.Type;
 import tacos.Taco;
 import tacos.TacoOrder;
+import tacos.repository.IngredientRepository;
 
 @Slf4j
 @Controller
@@ -21,27 +24,20 @@ import tacos.TacoOrder;
 @SessionAttributes("tacoOrder")
 public class DesignTacoController {
 
+    private final IngredientRepository ingredientRepo;
+    @Autowired
+    public DesignTacoController(
+            IngredientRepository ingredientRepo) {
+        this.ingredientRepo = ingredientRepo;
+    }
+
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
-        List<Ingredient> ingredients = Arrays.asList(
-                new Ingredient("FLTO", "Мучная Tortilla", Type.WRAP),
-                new Ingredient("COTO", "Кукурузная Tortilla", Type.WRAP),
-                new Ingredient("GRBF", "Говяжий фарш", Type.PROTEIN),
-                new Ingredient("CARN", "Свиной фарш", Type.PROTEIN),
-                new Ingredient("CHDF", "Куриный фарш", Type.PROTEIN),
-                new Ingredient("TMTO", "Помидоры черри", Type.VEGGIES),
-                new Ingredient("LETC", "Лист салата", Type.VEGGIES),
-                new Ingredient("CHED", "Чедр", Type.CHEESE),
-                new Ingredient("JACK", "Чёрный принц", Type.CHEESE),
-                new Ingredient("RUCK", "Российский", Type.CHEESE),
-                new Ingredient("SLSA", "Сальса", Type.SAUCE),
-                new Ingredient("SRCR", "Сметана", Type.SAUCE)
-        );
-
+        Iterable<Ingredient> ingredients = ingredientRepo.findAll();
         Type[] types = Ingredient.Type.values();
         for (Type type : types) {
-            model.addAttribute(type.toString().toLowerCase(),
-                    filterByType(ingredients, type));
+            model.addAttribute(type.toString().toLowerCase(Locale.ROOT),
+                    filterByType((List<Ingredient>) ingredients, type));
         }
     }
 
