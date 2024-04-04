@@ -5,18 +5,24 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.hibernate.validator.constraints.CreditCardNumber;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Data
+@Table("Taco_Cloud_Order")
 public class TacoOrder {
 
+    @Id
     private Long id;
 
     private Date placedAt;
 
+    @Column("customer_name")
     @NotBlank(message = "Требуется наименование доставки")
     private String deliveryName;
 
